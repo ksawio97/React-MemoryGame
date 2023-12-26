@@ -1,0 +1,9 @@
+.card {
+    background-color: blueviolet;
+
+    width: 12vw;
+    height: 12vw;
+
+    max-width: 11em;
+    max-height: 11em;
+}

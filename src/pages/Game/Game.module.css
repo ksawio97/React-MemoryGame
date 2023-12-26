@@ -1,0 +1,13 @@
+.board {
+    background-color: bisque;
+    min-height: 100vh;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+
+    row-gap: 1em;
+    column-gap: 2em;
+    padding: 3em;
+}
