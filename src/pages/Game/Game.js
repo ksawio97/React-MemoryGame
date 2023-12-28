@@ -1,54 +1,74 @@
 import styles from './Game.module.css';
 import Card from '../../components/Card/Card.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shuffledArr } from '../../utils/shuffle.js'
 
 /**
  * 
- * @param {Array<string>} cardsFaces images src  
- * @param {function(number, number)}
- * @returns {Array<Card>, Map<number, number>}
+ * @param {Array<string>} cardsFaces images src
+ * @returns {Array<any>}
  */
-function generateCards(cardsFaces, tryClick) {
+function generateCardsInfo(cardsFaces) {
     const cardsCount = cardsFaces.length * 2;
-    const cardPairById = new Map();
+    const getCardFaceId = new Map();
     
     //id starts from 1
     shuffledArr(Array.from({length: cardsCount}, (_, i) => i + 1)).forEach((cardId, index) => {
-        cardPairById.set(cardId, Math.floor(index / 2));
+        getCardFaceId.set(cardId, Math.floor(index / 2));
     });
     
-    const cards = [];
+    const cardsInfo = [];
     for (let i = 0; i < cardsCount; i++) {
-        const faceId = cardPairById.get(i + 1);
-        cards.push(
-        <Card key={i} 
-            id={i} 
-            face={cardsFaces[faceId]}
-            faceId={faceId}
-            tryClick={tryClick}/>);
+        const faceId = getCardFaceId.get(i + 1);
+        cardsInfo.push({
+            id: i,
+            face: cardsFaces[faceId],
+            faceId: faceId,
+            flipped: false
+        });
     }
-    return cards;
+    return cardsInfo;
 }
 
 const Game = () => {
-    //there can be only 2 clicked cards
-    const [[clickedCardId, clickedCardFaceId], setClickedCardInfo] = useState([-1, -1]);
-    
-    const tryClick = (id, faceId) => {
-        if (clickedCardId === id)
-            return false;
+    const [cardsInfo, setCardsInfo] = useState(generateCardsInfo(['logo192.png']));
+    const [flippedCardsId, setFlippedCardsId] = useState([]);
 
-        setClickedCardInfo([id, faceId]);
-        return true;
+    useEffect(() => {
+        //show flipped cards
+        const flipped = new Set(flippedCardsId);
+        setCardsInfo(cardsInfo.map((cardInfo) => {
+            cardInfo.flipped = flipped.has(cardInfo.id);
+            return cardInfo;
+        }));
+        //if two were shown hide them after timer
+        if (flippedCardsId.length === 2) {
+            setTimeout(() => {
+                setFlippedCardsId([]);
+            }, 2000);
+        }
+
+    }, [flippedCardsId]);
+
+    const tryFlip = (id) => {
+        //if clicked same card or length is max (2)
+        if ((flippedCardsId.length === 2) || (flippedCardsId.length === 1 && cardsInfo[flippedCardsId[0]].id === id))
+            return;
+        setFlippedCardsId([...flippedCardsId, id]);
     };
-
-    const cards = generateCards(['/logo192.png'], tryClick);
+    
     return (
         <div className={styles.board}>
-            {cards}
+            {cardsInfo.map((cardsInfo) => 
+                <Card key={cardsInfo.id}
+                    id={cardsInfo.id}
+                    face={cardsInfo.face}
+                    faceId={cardsInfo.faceId}
+                    flipped={cardsInfo.flipped}
+                    tryFlip={tryFlip}/>
+            )}
         </div>
-    )
+    );
 }
 
 export default Game;

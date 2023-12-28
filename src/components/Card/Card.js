@@ -1,29 +1,15 @@
 import style from './Card.module.css';
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 
-const Card = ({id, face, faceId, tryClick}) => {
-    const [clicked, setClicked] = useState(false);
-    const classes = [style.card];
-    if (clicked)
-        classes.push(style.clicked);
-
-    const onClick = () => {
-        if (tryClick(id, faceId)){
-            setClicked(true);
-            console.log(clicked);
-        }
-        else {
-            if (clicked)
-                setClicked(false);
-        }
-    }
+const Card = ({id, face, faceId, flipped, tryFlip}) => {
+    const classes = [style.card, flipped ? style.flipped : style.hidden];
 
     return (
         <div className={classes.join(' ')} 
-            onClick={onClick}>
-            { clicked ? <img src={face} alt={faceId} className={style.face}></img> : null }   
+            onClick={() => tryFlip(id)}>
+            { flipped ? <img src={face} alt={faceId} className={style.face}></img> : null }   
         </div>
     );
 }
 
-export default Card;
+export default memo(Card);

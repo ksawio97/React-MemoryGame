@@ -18,9 +18,15 @@
     animation-name: show;
 }
 
-.clicked {
+.flipped {
     animation-duration: 1s;
     animation-name: flip;
+}
+
+.hidden {
+    transform: rotateY(180deg) scale(100%);
+    animation-duration: 1s;
+    animation-name: hide;
 }
 
 @keyframes flip {
@@ -32,6 +38,18 @@
     }
     to {
         transform: rotateY(180deg) scale(100%);
+    }
+}
+
+@keyframes hide {
+    from {
+        transform: rotateY(180deg) scale(100%);
+    }
+    50% {
+        transform: scale(95%);
+    }
+    to {
+        transform: rotateY(0deg) scale(100%);
     }
 }
 
