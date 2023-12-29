@@ -1,5 +1,5 @@
 import styles from './Game.module.css';
-import Card from '../../components/Card/Card.js';
+import Card from '../Card/Card.js';
 import React, { useEffect, useState } from 'react';
 import { shuffledArr } from '../../utils/shuffle.js'
 
@@ -35,12 +35,26 @@ const Game = () => {
     const [flippedCardsId, setFlippedCardsId] = useState([]);
 
     useEffect(() => {
+        let somethingChanged = false;
         //show flipped cards
         const flipped = new Set(flippedCardsId);
-        setCardsInfo(cardsInfo.map((cardInfo) => {
-            cardInfo.flipped = flipped.has(cardInfo.id);
+        const newCardsInfo = cardsInfo.map((cardInfo) => {
+            const shouldBeFlipped = flipped.has(cardInfo.id);
+            //if it's values are different
+            if (shouldBeFlipped !== cardInfo.flipped) {
+                //if something hasn't changed yet
+                if (!somethingChanged)
+                    somethingChanged = true;
+                cardInfo.flipped = flipped.has(cardInfo.id);
+            }
+            
             return cardInfo;
-        }));
+        });
+        //if nothing changed
+        if (!somethingChanged)
+            return;
+
+        setCardsInfo(newCardsInfo);
         //if two were shown hide them after timer
         if (flippedCardsId.length === 2) {
             setTimeout(() => {

@@ -1,6 +1,5 @@
 .board {
-    background-color: bisque;
-    min-height: 100vh;
+    align-self: center;
 
     display: flex;
     flex-wrap: wrap;

@@ -1,0 +1,8 @@
+.mainInterface {
+    height: auto;
+
+    background-color: #EEE2DE;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

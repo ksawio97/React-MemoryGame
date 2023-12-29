@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-import Game from './pages/Game/Game';
+import Main from './pages/Main/Main';
 
 function App() {
   return (
     <div className="App">
-      <Game />
+      <Main />
     </div>
   );
 }
