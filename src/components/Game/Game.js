@@ -1,7 +1,8 @@
 import styles from './Game.module.css';
 import Card from '../Card/Card.js';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shuffledArr } from '../../utils/Shuffle.js'
+import { getGridSize } from '../../utils/GetGridSize.js';
 
 /**
  * 
@@ -32,6 +33,8 @@ function generateCardsInfo(cardsFaces) {
 }
 
 const Game = ({cardsFaces}) => {
+    const [[rowsCount, columnsCount]] = useState(getGridSize(cardsFaces.length));
+
     const [cardsInfo, setCardsInfo] = useState(generateCardsInfo(cardsFaces));
     const [flippedCardsId, setFlippedCardsId] = useState([]);
 
@@ -84,14 +87,16 @@ const Game = ({cardsFaces}) => {
     
     return (
         <div className={styles.board}>
-            {cardsInfo.map((cardsInfo) => 
+            {cardsInfo.map(cardsInfo => 
                 <Card key={cardsInfo.id}
                     id={cardsInfo.id}
                     face={cardsInfo.face}
                     faceId={cardsInfo.faceId}
                     flipped={cardsInfo.flipped}
                     guessResult={cardsInfo.guessResult}
-                    tryFlip={tryFlip}/>
+                    tryFlip={tryFlip}
+                    gridRow={cardsInfo.id % (rowsCount + 1)}
+                    gridColumn={cardsInfo.id % (columnsCount + 1)}/>
             )}
         </div>
     );
