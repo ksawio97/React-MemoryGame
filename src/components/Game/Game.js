@@ -24,6 +24,7 @@ function generateCardsInfo(cardsFaces) {
             id: i,
             face: cardsFaces[faceId],
             faceId: faceId,
+            guessResult: -1,
             flipped: false
         });
     }
@@ -54,14 +55,23 @@ const Game = ({cardsFaces}) => {
         if (!somethingChanged)
             return;
 
-        setCardsInfo(newCardsInfo);
-        //if two were shown hide them after timer
+        //if two were shown
         if (flippedCardsId.length === 2) {
+            //shows if pair was found
+            const guessResult = newCardsInfo[flippedCardsId[0]].faceId === newCardsInfo[flippedCardsId[1]].faceId;
+            newCardsInfo[flippedCardsId[0]].guessResult = Number(guessResult);
+            newCardsInfo[flippedCardsId[1]].guessResult = Number(guessResult);
+
+            //hide them after timer
             setTimeout(() => {
+                //reset guess results (do not need to update it bcs this effect function gets it done)
+                newCardsInfo[flippedCardsId[0]].guessResult = -1;
+                newCardsInfo[flippedCardsId[1]].guessResult = -1;
                 setFlippedCardsId([]);
             }, 2000);
         }
 
+        setCardsInfo(newCardsInfo);
     }, [flippedCardsId]);
 
     const tryFlip = (id) => {
@@ -80,6 +90,7 @@ const Game = ({cardsFaces}) => {
                     face={cardsInfo.face}
                     faceId={cardsInfo.faceId}
                     flipped={cardsInfo.flipped}
+                    guessResult={cardsInfo.guessResult}
                     tryFlip={tryFlip}/>
             )}
         </div>

@@ -18,6 +18,21 @@
     animation-name: show;
 }
 
+.correct {
+    background-color: #5e925e;
+
+}
+
+.incorrect {
+    background-color: #b65360;
+}
+
+.correct, .incorrect {
+    transition-duration: 0.3s;
+    transition-delay: 0.5s;
+    transition-property: background-color;
+}
+
 .flipped {
     animation-duration: 1s;
     animation-name: flip;
