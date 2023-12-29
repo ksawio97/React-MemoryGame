@@ -4,9 +4,6 @@ import React, { memo, useEffect } from 'react';
 const Card = ({id, face, faceId, flipped, tryFlip}) => {
     const classes = [style.card, flipped ? style.flipped : style.hidden];
 
-    useEffect(() => {
-        console.log(`Card: ${id} rerendered!`);
-    });
     return (
         <div className={classes.join(' ')} 
             onClick={() => tryFlip(id)}>

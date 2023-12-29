@@ -1,7 +1,7 @@
 import styles from './Game.module.css';
 import Card from '../Card/Card.js';
-import React, { useEffect, useState } from 'react';
-import { shuffledArr } from '../../utils/shuffle.js'
+import React, { useCallback, useEffect, useState } from 'react';
+import { shuffledArr } from '../../utils/Shuffle.js'
 
 /**
  * 
@@ -30,8 +30,8 @@ function generateCardsInfo(cardsFaces) {
     return cardsInfo;
 }
 
-const Game = () => {
-    const [cardsInfo, setCardsInfo] = useState(generateCardsInfo(['logo192.png']));
+const Game = ({cardsFaces}) => {
+    const [cardsInfo, setCardsInfo] = useState(generateCardsInfo(cardsFaces));
     const [flippedCardsId, setFlippedCardsId] = useState([]);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const Game = () => {
                 //if something hasn't changed yet
                 if (!somethingChanged)
                     somethingChanged = true;
-                cardInfo.flipped = flipped.has(cardInfo.id);
+                cardInfo.flipped = shouldBeFlipped;
             }
             
             return cardInfo;
@@ -65,10 +65,11 @@ const Game = () => {
     }, [flippedCardsId]);
 
     const tryFlip = (id) => {
-        //if clicked same card or length is max (2)
-        if ((flippedCardsId.length === 2) || (flippedCardsId.length === 1 && cardsInfo[flippedCardsId[0]].id === id))
-            return;
-        setFlippedCardsId([...flippedCardsId, id]);
+        setFlippedCardsId((flippedCardsId) => {
+            if ((flippedCardsId.length === 2) || (flippedCardsId.length === 1 && cardsInfo[flippedCardsId[0]].id === id))
+                return flippedCardsId;
+            return [...flippedCardsId, id];
+        });
     };
     
     return (
