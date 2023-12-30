@@ -19,4 +19,13 @@ function shuffledArr(arr) {
     return arr;
 }
 
-module.exports = {shuffleArr, shuffledArr};
+/**
+ * 
+ * @param {Array<any>} arr 
+ * @param {Number} count 
+ * @returns returns count random elements
+ */
+function getRandomElements(arr, count) {
+    return shuffledArr([...arr]).splice(0, count);
+}
+module.exports = {shuffleArr, shuffledArr, getRandomElements};

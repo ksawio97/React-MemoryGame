@@ -4,7 +4,7 @@
     display: grid;
 
     align-content: flex-start;
-
+    
     row-gap: 1em;
     column-gap: 2em;
     padding: 3em;

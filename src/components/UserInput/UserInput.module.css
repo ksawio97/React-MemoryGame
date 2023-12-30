@@ -1,0 +1,82 @@
+.rangeSliderContainer {
+    align-self: center;
+    width: 10em;
+    position: relative;
+}
+
+.rangeSlider {
+    appearance: none;
+    outline: none;
+    height: 0.5em;
+    border-radius: 5px;
+
+    opacity: 0.8;
+    transition: opacity .2s;
+}
+
+.rangeSlider:hover {
+    opacity: 1;
+}
+
+.rangeSlider::-webkit-slider-thumb, .rangeSlider::-moz-range-thumb {
+    appearance: none;
+    outline: none;
+    width: 0.9em; /* Set a specific slider handle width */
+    height: 1em; /* Slider handle height */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 50%;
+    border-color: #5a5454;
+}
+
+.rangeSlider:hover::-webkit-slider-thumb, 
+    .rangeSlider:hover::-moz-range-thumb {
+    transform: scale(120%);
+    transition: transform .2s;
+}
+.easy, .easy::-webkit-slider-thumb, .easy::-moz-range-thumb {
+    background-color: green;
+}
+
+.medium, .medium::-webkit-slider-thumb, .medium::-moz-range-thumb {
+    background-color: orange;
+}
+
+.hard, .hard::-webkit-slider-thumb, .hard::-moz-range-thumb {
+    background-color: red;
+}
+
+.confirmButton {
+    width: min-content;
+    height: min-content;
+    align-self: center;
+
+    padding: 0.5em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+
+    background-color: #2B2A4C;
+    color: white;
+    border-radius: 3px;
+    border: none;
+}
+
+.confirmButton:hover {
+    background-color: #39383f;
+
+    animation: shake .3s linear infinite;
+}
+
+@keyframes shake {
+    from {
+        transform: rotate(0deg);
+    }
+    20%, 60%{
+        transform: rotate(1deg);
+    }
+    40%, 80% {
+        transform: rotate(-1deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}

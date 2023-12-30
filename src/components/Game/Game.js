@@ -1,5 +1,5 @@
 import styles from './Game.module.css';
-import Card from '../Card/Card.js';
+import Card from './Card/Card.js';
 import React, { useEffect, useState } from 'react';
 import { shuffledArr } from '../../utils/Shuffle.js'
 import { getGridSize, getElementRow, getElementColumn, getGridTemplate } from '../../utils/GridSizesFunctions.js';
@@ -31,14 +31,10 @@ function generateCardsInfo(cardsFaces) {
     return cardsInfo;
 }
 
-const Game = ({cardsFaces}) => {
+const Game = ({cardsFaces, endGame}) => {
     const [rowsCount, columnsCount] = getGridSize(cardsFaces.length);
     const [rowsTemplate, columnsTemplate] = [getGridTemplate(rowsCount), getGridTemplate(columnsCount)];
-    //this states won't change
-    // const [[rowsCount, columnsCount]] = useState(getGridSize(cardsFaces.length));
-    // const [[rowsTemplate, columnsTemplate]] = useState([getGridTemplate(rowsCount), getGridTemplate(columnsCount)]);
 
-    //this states will change
     const [cardsInfo, setCardsInfo] = useState(generateCardsInfo(cardsFaces));
     const [flippedCardsId, setFlippedCardsId] = useState([]);
     //cards to stop rerendering
@@ -89,7 +85,6 @@ const Game = ({cardsFaces}) => {
 
                     //do not need to update cardsInfo bcs effect function associated with flippedCardsId gets it done
                 }
-
                 
                 setFlippedCardsId([]);
             }, 2000);
@@ -97,6 +92,12 @@ const Game = ({cardsFaces}) => {
 
         setCardsInfo(newCardsInfo);
     }, [flippedCardsId, cardsInfo]);
+
+    useEffect(() => {
+        if (guessedCardsId.size === cardsInfo.length) {
+            endGame();
+        }
+    }, [guessedCardsId, cardsInfo, endGame]);
 
     const tryFlip = (id) => {
         setFlippedCardsId((flippedCardsId) => {

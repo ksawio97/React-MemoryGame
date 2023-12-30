@@ -6,7 +6,7 @@
 const getGridSize = (distinctNodes) => {
     const columnCount = Math.sqrt(distinctNodes * 2);
     const rowsCount = Math.floor(columnCount);
-    return [rowsCount, rowsCount + Number(rowsCount !== columnCount)]
+    return [rowsCount, rowsCount + Number(rowsCount !== columnCount)];
 }
 
 /**
@@ -16,7 +16,7 @@ const getGridSize = (distinctNodes) => {
  * @returns {Number}
  */
 const getElementRow = (elementId, columnCount) => 
-    Math.floor((elementId - 1) / columnCount) + 1;
+    Math.floor(elementId / columnCount) + 1;
 
 /**
  * 
@@ -25,7 +25,7 @@ const getElementRow = (elementId, columnCount) =>
  * @returns {Number}
  */
 const getElementColumn = (elementId, columnCount) => 
-    elementId % (columnCount + 1);
+    (elementId % columnCount) + 1;
 
 /**
  * 
