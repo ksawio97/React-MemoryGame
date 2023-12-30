@@ -2,8 +2,7 @@ import styles from './Game.module.css';
 import Card from '../Card/Card.js';
 import React, { useEffect, useState } from 'react';
 import { shuffledArr } from '../../utils/Shuffle.js'
-import { getGridSize } from '../../utils/GetGridSize.js';
-
+import { getGridSize, getElementRow, getElementColumn, getGridTemplate } from '../../utils/GridSizesFunctions.js';
 /**
  * 
  * @param {Array<string>} cardsFaces images src
@@ -33,10 +32,17 @@ function generateCardsInfo(cardsFaces) {
 }
 
 const Game = ({cardsFaces}) => {
-    const [[rowsCount, columnsCount]] = useState(getGridSize(cardsFaces.length));
+    const [rowsCount, columnsCount] = getGridSize(cardsFaces.length);
+    const [rowsTemplate, columnsTemplate] = [getGridTemplate(rowsCount), getGridTemplate(columnsCount)];
+    //this states won't change
+    // const [[rowsCount, columnsCount]] = useState(getGridSize(cardsFaces.length));
+    // const [[rowsTemplate, columnsTemplate]] = useState([getGridTemplate(rowsCount), getGridTemplate(columnsCount)]);
 
+    //this states will change
     const [cardsInfo, setCardsInfo] = useState(generateCardsInfo(cardsFaces));
     const [flippedCardsId, setFlippedCardsId] = useState([]);
+    //cards to stop rerendering
+    const [guessedCardsId, setGuessedCardsId] = useState(new Set());
 
     useEffect(() => {
         let somethingChanged = false;
@@ -67,15 +73,30 @@ const Game = ({cardsFaces}) => {
 
             //hide them after timer
             setTimeout(() => {
-                //reset guess results (do not need to update it bcs this effect function gets it done)
-                newCardsInfo[flippedCardsId[0]].guessResult = -1;
-                newCardsInfo[flippedCardsId[1]].guessResult = -1;
+
+                //guessed correctly delete them from remaining pool
+                if (guessResult) {
+                    setGuessedCardsId((prev) => {
+                        prev.add(flippedCardsId[0]);
+                        prev.add(flippedCardsId[1]);
+                        return prev;
+                    });
+                }
+                //guessed incorrectly reset guessResult
+                else {
+                    newCardsInfo[flippedCardsId[0]].guessResult = -1;
+                    newCardsInfo[flippedCardsId[1]].guessResult = -1;
+
+                    //do not need to update cardsInfo bcs effect function associated with flippedCardsId gets it done
+                }
+
+                
                 setFlippedCardsId([]);
             }, 2000);
         }
 
         setCardsInfo(newCardsInfo);
-    }, [flippedCardsId]);
+    }, [flippedCardsId, cardsInfo]);
 
     const tryFlip = (id) => {
         setFlippedCardsId((flippedCardsId) => {
@@ -86,8 +107,13 @@ const Game = ({cardsFaces}) => {
     };
     
     return (
-        <div className={styles.board}>
+        <div className={styles.board} 
+        style={{gridTemplateRows: rowsTemplate, gridTemplateColumns: columnsTemplate}}>
             {cardsInfo.map(cardsInfo => 
+                guessedCardsId.has(cardsInfo.id) ? 
+                //TODO add animation to placeholder that indicates card disappearing
+                //empty placeholder so card stay in same place
+                <div style={{gridRow: getElementRow(cardsInfo.id, rowsCount), gridColumn: getElementColumn(cardsInfo.id, columnsCount)}}/> :
                 <Card key={cardsInfo.id}
                     id={cardsInfo.id}
                     face={cardsInfo.face}
@@ -95,8 +121,8 @@ const Game = ({cardsFaces}) => {
                     flipped={cardsInfo.flipped}
                     guessResult={cardsInfo.guessResult}
                     tryFlip={tryFlip}
-                    gridRow={cardsInfo.id % (rowsCount + 1)}
-                    gridColumn={cardsInfo.id % (columnsCount + 1)}/>
+                    gridRow={getElementRow(cardsInfo.id, columnsCount)}
+                    gridColumn={getElementColumn(cardsInfo.id, columnsCount)}/>
             )}
         </div>
     );

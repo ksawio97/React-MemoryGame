@@ -2,9 +2,7 @@
     align-self: center;
 
     display: grid;
-    grid-template-rows: auto;
-    grid-template-columns: auto;
-    
+
     align-content: flex-start;
 
     row-gap: 1em;
