@@ -50,7 +50,7 @@
     height: min-content;
     align-self: center;
 
-    padding: 0.5em;
+    padding: 0.8em;
     margin-top: 1em;
     margin-bottom: 2em;
 
@@ -68,15 +68,15 @@
 
 @keyframes shake {
     from {
-        transform: rotate(0deg);
+        transform: rotate(0deg) scale(1.05);
     }
     20%, 60%{
-        transform: rotate(1deg);
+        transform: rotate(3deg) scale(1.1);
     }
     40%, 80% {
-        transform: rotate(-1deg);
+        transform: rotate(-3deg) scale(1.1);
     }
     to {
-        transform: rotate(0deg);
+        transform: rotate(0deg) scale(1.05);
     }
 }

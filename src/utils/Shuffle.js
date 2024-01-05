@@ -28,4 +28,5 @@ function shuffledArr(arr) {
 function getRandomElements(arr, count) {
     return shuffledArr([...arr]).splice(0, count);
 }
+
 module.exports = {shuffleArr, shuffledArr, getRandomElements};

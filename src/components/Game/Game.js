@@ -112,9 +112,8 @@ const Game = ({cardsFaces, endGame}) => {
         style={{gridTemplateRows: rowsTemplate, gridTemplateColumns: columnsTemplate}}>
             {cardsInfo.map(cardsInfo => 
                 guessedCardsId.has(cardsInfo.id) ? 
-                //TODO add animation to placeholder that indicates card disappearing
                 //empty placeholder so card stay in same place
-                <div style={{gridRow: getElementRow(cardsInfo.id, rowsCount), gridColumn: getElementColumn(cardsInfo.id, columnsCount)}}/> :
+                <div key={cardsInfo.id} style={{gridRow: getElementRow(cardsInfo.id, rowsCount), gridColumn: getElementColumn(cardsInfo.id, columnsCount)}}/> :
                 <Card key={cardsInfo.id}
                     id={cardsInfo.id}
                     face={cardsInfo.face}
